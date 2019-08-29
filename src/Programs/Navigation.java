@@ -44,8 +44,7 @@ public class Navigation {
 	
 	 WebElement mod = driver.findElement(By.xpath(xpath1+Module+xpath2));
 	
-	 mod.click();
-	 
+	 a.moveToElement(driver.findElement(By.xpath(xpath1+Module+xpath2))).click().build().perform();
 	 Thread.sleep(4000);
 	
 	  
@@ -76,10 +75,10 @@ public class Navigation {
   public Object[][] dp() throws IOException
   {
 	  
-		Object[][] SED = new Object[8][1];		
+		Object[][] SED = new Object[16][1];		
 		
 
-		for(int rw = 0; rw<=7;rw++)
+		for(int rw = 0; rw<=15;rw++)
 			{
 				//List<String> arr = Sample.Read_Excel1.readexceldata(".//Book4.xlsx",rw,3);
 			List<String> arr = ReadExcel.readexceldata("C:\\Users\\sekhar.ch\\Desktop\\Tabs.xlsx",rw,1);
