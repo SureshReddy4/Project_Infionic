@@ -2,10 +2,13 @@ package Programs;
 
 import org.testng.annotations.Test;
 import org.testng.annotations.BeforeTest;
-
+import org.testng.annotations.DataProvider;
+import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.ElementNotInteractableException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -19,22 +22,33 @@ public class Navigation {
 	static WebDriver driver;
 	static WebDriverWait wait;
 	static Actions a;
-  @Test
-  public void Nav() {
-	  
-	  WebElement menu = driver.findElement(By.id("mobi"));
-		 wait.until(ExpectedConditions.elementToBeClickable(menu));
+	
+  @Test(dataProvider="dp")
+  public void Nav(String Module) throws InterruptedException {
 	  a = new Actions(driver);
-		 
-	  a.moveToElement(driver.findElement(By.id("mobi"))).build().perform();
+	  
+	  wait = new WebDriverWait(driver,60);
+	
+	  wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//tbody//tr//td//a//div[@class='menuIcon']")));
+	  
+	
+	  a.moveToElement(driver.findElement(By.xpath("//tbody//tr//td//a//div[@class='menuIcon']"))).build().perform();
+	  Thread.sleep(2000);
 	  
 	  
 	  String xpath1 = "//div[@id='divtop']//ul//li//a//div[contains(text(),'";
-	  String xpath2 = "HR')]";
-//	  driver.findElement(By.xpath("//div[@id='divtop']//ul//li//a//div[contains(text(),'HR')]"));
-	  driver.findElement(By.xpath(xpath1+xpath2)).click();
+	
+	  String xpath2 = "')]";
+	
+	  wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(xpath1+Module+xpath2)));
+	
+	 WebElement mod = driver.findElement(By.xpath(xpath1+Module+xpath2));
+	
+	 mod.click();
+	 
+	 Thread.sleep(4000);
+	
 	  
-	  driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
   }
   @BeforeTest
   public void beforeTest() throws InterruptedException 
@@ -56,6 +70,27 @@ public class Navigation {
   public void afterTest() throws InterruptedException {
 	  Thread.sleep(5000);
 	  driver.quit();
+  }
+  
+  @DataProvider
+  public Object[][] dp() throws IOException
+  {
+	  
+		Object[][] SED = new Object[8][1];		
+		
+
+		for(int rw = 0; rw<=7;rw++)
+			{
+				//List<String> arr = Sample.Read_Excel1.readexceldata(".//Book4.xlsx",rw,3);
+			List<String> arr = ReadExcel.readexceldata("C:\\Users\\sekhar.ch\\Desktop\\Tabs.xlsx",rw,1);
+				{
+					SED[rw][0] = arr.get(0);
+				
+				}	
+					
+			}
+		return SED;
+
   }
 
 }
